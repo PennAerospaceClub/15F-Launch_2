@@ -70,10 +70,8 @@ int counter = 0;
 
 //1.0 Serial Declarations
 
-#define rxPin 2
-#define txPin 3
 
-SoftwareSerial mySerial = SoftwareSerial(rxPin, txPin);
+SoftwareSerial arduinoSerial(12,13);
 
 //1.1 Sanity Check
 boolean sane = false;
@@ -91,6 +89,7 @@ const int TEMP2_PIN = A1;
 //1.4 SD Declarations
 int cs_pin = 53;
 boolean sd_connected = false;
+int nextWrite = millis();
 
 //1.5 IMU Declarations
 /* Assign a unique ID to the sensors */
@@ -142,16 +141,19 @@ boolean redLightOn = false;
 unsigned int greenLightBlinkStop;
 boolean greenLightOn = false;
 
+#define nextWritePeriod 5000 
 
 //Section 2: Setup
 void setup() {
 
  //2.1 Initializations
 
-  //Software serial 
-  pinMode(rxPin, INPUT);
-  pinMode(txPin, OUTPUT);
-  mySerial.begin(9600);
+  arduinoSerial.begin(9600); 
+  
+  //GPS Serial serial 
+  pinMode(10, INPUT); //rx
+  pinMode(11, OUTPUT); //tx
+  
 
   Serial.begin(9600); //115200
   
@@ -202,26 +204,11 @@ void setup() {
   if(!sd_connected){
     digitalWrite(LED_YELLOW, HIGH);
   }
+
 }
 
 //Section 3: Loop
 void loop() {
-
-//3.0 Serial Comms with Due
-
-if ( mySerial.available() )
-    {
-         while ( mySerial.available() )
-             Serial.write(mySerial.read());
-
-         Serial.println();
-    }
-
-    if ( Serial.available() )
-    {
-        while ( Serial.available() )
-            mySerial.write( Serial.read() );
-    }
   
 //3.1 GPS Section
   updateGPS();
@@ -236,7 +223,7 @@ if ( mySerial.available() )
   }
   
 //3.2 IMU Section
-  String imuData = runIMU();
+   String imuData = runIMU();
   String stringForSD = imuData + " " + GPSdataString; // the final string that we print to SD
 
 //3.4 Sanity and Nichrome
@@ -253,7 +240,15 @@ if ( mySerial.available() )
   updateNichromeExperiment();
   }
 
-}
+//Clock to write to SD and send a string to the trackuino
+
+  if(millis() - nextWrite >= nextWritePeriod){
+      arduinoSerial.write(imuData.c_str());
+      SDLog(stringForSD); 
+      nextWrite += nextWritePeriod; 
+  }
+
+} //end of loop
 
 //Section 4: Functions
 
