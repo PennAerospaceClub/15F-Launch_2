@@ -132,6 +132,8 @@ void loop() {
   while (arduinoSerial.available()){
     megaInput.concat(arduinoSerial.read());
   }
+ 
+  arduinoSerial.write(("I got:" + megaInput).c_str()); //test for reading data
   
   if ((int32_t) (millis() - next_aprs) >= 0) {
     get_pos();
@@ -140,8 +142,6 @@ void loop() {
     while (afsk_flush()) {
       power_save();
     }
-
-   megaInput = ""; 
 
     #ifdef DEBUG_MODEM
     // Show modem ISR stats from the previous transmission
