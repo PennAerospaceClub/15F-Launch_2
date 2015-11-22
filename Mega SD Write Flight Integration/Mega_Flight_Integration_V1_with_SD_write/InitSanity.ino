@@ -3,83 +3,91 @@
 //4.5 Sanity
 boolean initiallySane()
 {
+  int sanityState = 0;
   if(!(currAlt == -1) || !(lat == -1) || !(longit == -1)){
     GPSgivingDataInitially = true;
+    sanityState++;
   }
   if(inBdryBox()){
     inBdry = true;
+    sanityState += 2;
   }
   if(!isFalling()){
     falling = false;
+    sanityState += 4;
   }
   if(arduinoSerial && GPSSerial){
     softwareSerialsInitially = true;
+    sanityState += 8;
   }
-  //add SD print check
+//  String duoHandshake = "";
+//  for(int i = 0; i < 19; i++){
+//    duoHandshake += arduinoSerial.read();
+//  }
+//  if(duoHandshake == "Hello, Mega world?"){
+//    sd_connected = true;
+//    sanityState += 16; 
+//  }
+  Serial.print("Sanity: ");
+  Serial.println(sanityState);
+  sanityLED(sanityState);
+  if(sanityState < 31){
+    return false;
+  }
+  else{
+    return true;
+  }
 }
 
-boolean sanityCheck()
-{
-  boolean bdryBool = true;
-  boolean fallingBool = true;
-  boolean gpsBool = true;
-  
-  if (!inBdryBox()){
-    bdryBool =  false;
+void sanityLED(int sanityState){
+  if(sanityState == 31){
+    digitalWrite(LED_RED, LOW);
+    digitalWrite(LED_GREEN, LOW);
+    digitalWrite(LED_YELLOW, LOW);
   }
-  if (isFalling()){
-    fallingBool =  false;
-  }
-  if ((currAlt == -1) || (lat == -1) || (longit == -1)){
-    gpsBool =  false;
-  }
-
-  sanitySerial_SD_LED(bdryBool, fallingBool, gpsBool);
-
-  if(bdryBool && fallingBool && gpsBool){
-    return true;
-  }  
   else{
-    return false;
-  }  
+    digitalWrite(LED_RED, HIGH);
+    digitalWrite(LED_GREEN, HIGH);
+    digitalWrite(LED_YELLOW, HIGH);
+  }
 }
 
 //RED LIGHT: GPS NOT UPDATING
 //YELLOW LIGHT: THINKS IT'S FALLING
 //GREEN LIGHT: THINKS IT'S OUTSIDE BOUNDARY BOX
-void sanitySerial_SD_LED(boolean bdryBool, boolean fallingBool, boolean gpsBool)
-{
-     boolean myBdryBool = bdryBool;
-     boolean myFallingBool = fallingBool;
-     boolean myGpsBool = gpsBool;
-      if(!myBdryBool || !myFallingBool || !myGpsBool){
-        //Serial.println("no sane");
-        if(!redLightOn){
-          redLightBlinkStop = millis() + 1000;
-          digitalWrite(LED_RED, HIGH);
-          digitalWrite(LED_GREEN, LOW);
-          redLightOn = true;
-        }
-        else{
-          if(millis() > redLightBlinkStop){
-            redLightBlinkStop = 0;
-            redLightOn = false;
-            digitalWrite(LED_RED, LOW);
-            digitalWrite(LED_GREEN, LOW);
-          }
-        }
-      }  
-      else{
-          if(!greenLightOn){
-          redLightBlinkStop = millis() + 1000;
-          digitalWrite(LED_RED, LOW);
-          digitalWrite(LED_GREEN, HIGH);
-          greenLightOn = true;
-        }
-        else{
-          if(millis() > greenLightBlinkStop){
-            greenLightOn = false;
-          }
-        }
-      }         
-}
+//void sanityLED()
+//{
+//     boolean myBdryBool = bdryBool;
+//     boolean myFallingBool = fallingBool;
+//     boolean myGpsBool = gpsBool;
+//      if(!myBdryBool || !myFallingBool || !myGpsBool){
+//        //Serial.println("no sane");
+//        if(!redLightOn){
+//          redLightBlinkStop = millis() + 1000;
+//          digitalWrite(LED_RED, HIGH);
+//          digitalWrite(LED_GREEN, LOW);
+//          redLightOn = true;
+//        }
+//        else{
+//          if(millis() > redLightBlinkStop){
+//            redLightBlinkStop = 0;
+//            redLightOn = false;
+//            digitalWrite(LED_RED, LOW);
+//            digitalWrite(LED_GREEN, LOW);
+//          }
+//        }
+//      }  
+//      else{
+//          if(!greenLightOn){
+//          redLightBlinkStop = millis() + 1000;
+//          digitalWrite(LED_RED, LOW);
+//          digitalWrite(LED_GREEN, HIGH);
+//          greenLightOn = true;
+//        }
+//        else{
+//          if(millis() > greenLightBlinkStop){
+//            greenLightOn = false;
+//          }
+//        }
+//      }         
+//}

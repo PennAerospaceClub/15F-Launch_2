@@ -33,9 +33,9 @@ boolean softwareSerialsInitially = false;
 boolean sd_connected = false;
 
 //1.2 LED Declarations
-const int LED_GREEN = 36;
-const int LED_YELLOW = 38;
-const int LED_RED = 40;
+const int LED_GREEN = 23;
+const int LED_YELLOW = 25;
+const int LED_RED = 27;
 
 unsigned int redLightBlinkStop;
 boolean redLightOn = false;
@@ -43,8 +43,8 @@ unsigned int greenLightBlinkStop;
 boolean greenLightOn = false;
 
 //1.3 Temperature Analog-in Declarations
-const int TEMP1_PIN = A0;
-const int TEMP2_PIN = A1;
+//const int TEMP1_PIN = A0;
+//const int TEMP2_PIN = A1;
 
 //1.4 SD Declarations
 int cs_pin = 53;
@@ -89,12 +89,12 @@ unsigned long smAlt = -1; //altitude in meters
 char sentence[SENTENCE_SIZE];
 
 //1.8 Nichrome Declarations
-const int NICHROME_GATE_PIN = 30;
+const int NICHROME_GATE_PIN = 29;
 boolean nichromeStarted = false;
 unsigned long nichromeEndTime = 0xFFFFFFFFL;
 boolean nichromeFinished = false;
 
-const int NICHROME_EXPERIMENT_PIN = 34;
+const int NICHROME_EXPERIMENT_PIN = 31;
 boolean nichromeExperimentStarted = false;
 unsigned long nichromeExperimentEndTime = 0xFFFFFFFFL;
 boolean nichromeExperimentFinished = false;
@@ -119,6 +119,7 @@ void setup() {
   //Initializations
   arduinoSerial.begin(9600); 
   Serial.begin(9600);
+  Serial.println(arduinoSerial.isListening()); //Debug
   arduinoSerial.write("Hello Uno"); 
   
   GPSSerial.begin(9600);
@@ -162,8 +163,18 @@ void setup() {
 
 //===========================================
 void loop() {
+  Serial.println("In loop"); //Debug
   while(!initSane){
     initSane = initiallySane();
+    //Debug
+    Serial.println(arduinoSerial.available());
+    arduinoSerial.write("Mega Here"); //Debug
+    delay(1000);
+    while(arduinoSerial.available() > 0){
+      Serial.print((arduinoSerial.read()));
+    }
+    delay(1000);
+  //End Debug
   }
   updateGPS();
   updateMaxAlt();
