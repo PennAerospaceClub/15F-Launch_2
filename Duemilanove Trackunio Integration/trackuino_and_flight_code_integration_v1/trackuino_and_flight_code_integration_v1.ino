@@ -1,7 +1,7 @@
 /*
  PAC Flight Code for Trackuino
- @version: 11/18/15
- @author Omkar Savant
+ @version: 11/21/15
+ @author Omkar Savant, based on source code from community
 
  //Changes to architecture: 
    This is the only code that goes on the Duemilanove. An input serial from the MEGA gives us data 
@@ -44,14 +44,13 @@
 #  include <WProgram.h>
 #endif
 
-//Section 1: Declarations
+//Section 1: Declamrations
 
 //0.0 Serial
 
-#define rxPin 3
-#define txPin 2
+String megaInput = "blank"; //This is the input from the Mega
 
-SoftwareSerial mySerial = SoftwareSerial(rxPin, txPin);
+SoftwareSerial arduinoSerial(12, 13); //rx,tx
 //1.0 Trackuino
 
 // Module constants
@@ -64,10 +63,9 @@ static int32_t next_aprs = 0;
 void setup() {
 
   //Mega Serial Comms
-    pinMode(rxPin, INPUT);
-    pinMode(txPin, OUTPUT);
-
-    mySerial.begin(9600);
+  
+  arduinoSerial.begin(9600); 
+  arduinoSerial.println("Hello, Mega world?");
 
   //2.0 Trackuino Setup
   pinMode(LED_PIN, OUTPUT);
@@ -116,7 +114,7 @@ void get_pos()
     do {
       if (Serial.available())
         valid_pos = gps_decode(Serial.read());
-    } while ( (millis() - timeout < VALID_POS_TIMEOUT) && ! valid_pos) ;
+    } while ( (millis() - timeout < VALID_POS_TIMEOUT) && ! valid_pos);
   
     /*if (valid_pos) {
       if (gps_altitude > BUZZER_ALTITUDE) {
@@ -130,31 +128,14 @@ void get_pos()
 //Section 3: Loop
 void loop() {
 
- //Serial Comms with Mega
-
- if ( mySerial.available() )
-    {
-         while ( mySerial.available() )
-             Serial.write(mySerial.read());
-
-         Serial.println();
-    }
-
-    if ( Serial.available() )
-    {
-        delay(5);
-
-        while ( Serial.available() )
-            mySerial.write( Serial.read() );
-    }
-    
 //Trackuino Section -- sends the next APRS frame
-
-  String serialInput = "!!!NO DATA!!!"; //This is the input from the Mega
+  if (arduinoSerial.available()){
+    megaInput = String(arduinoSerial.read());
+  }
   
   if ((int32_t) (millis() - next_aprs) >= 0) {
     get_pos();
-    aprs_send(serialInput); //Sending our IMU data
+    aprs_send(megaInput); //Sending our IMU data
     next_aprs += APRS_PERIOD * 1000L;
     while (afsk_flush()) {
       power_save();

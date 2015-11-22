@@ -106,7 +106,7 @@ unsigned int startTime;
 unsigned int sanityCheckTime = 0;
 boolean initDone;
 unsigned int calibrateTime = 10000; //milliseconds until performs sanityCheck
-#define nextWritePeriod 5000 
+#define nextWritePeriod 5000 //The period between SD and Trackuino writes; 5 seconds
 
 //1.10 Smoothing Variables
 unsigned long currGlobal;
@@ -119,6 +119,8 @@ void setup() {
   //Initializations
   arduinoSerial.begin(9600); 
   Serial.begin(9600);
+  arduinoSerial.write("Hello Uno"); 
+  
   GPSSerial.begin(9600);
   SPI.begin();
 
@@ -165,15 +167,14 @@ void loop() {
   }
   updateGPS();
   updateMaxAlt();
-  String GPSdataString = GPStoString(); 
   
   String imuData = runIMU();
 
   //Smoothing
-  smooth();
+  smooth(); 
 
   //Needs to be after smoothing -- AND TRACKUINO STUFF
-  String stringForSD = imuData + "," + GPSdataString; // the final string that we print to SD
+  String stringForSD = imuData + "," + GPStoString(); // the final string that we print to SD
   nichromeCheck();
   updateNichrome();
   nichromeExperimentCheck();

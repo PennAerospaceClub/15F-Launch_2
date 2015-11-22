@@ -145,8 +145,5 @@ void getField(char* buffer, int index)
   buffer[fieldPos] = '\0';
 }
 
-String GPStoString(){
-  String GPSdataString = String(lat) + "," + String(longit) + "," + String(currAlt);
-}
 
 

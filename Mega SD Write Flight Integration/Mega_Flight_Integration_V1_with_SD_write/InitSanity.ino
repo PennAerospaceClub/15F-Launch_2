@@ -15,6 +15,7 @@ boolean initiallySane()
   if(arduinoSerial && GPSSerial){
     softwareSerialsInitially = true;
   }
+  //add SD print check
 }
 
 boolean sanityCheck()
