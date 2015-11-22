@@ -4,26 +4,26 @@ void initIMU(){
   if(!accel.begin())
   {
     /* There was a problem detecting the ADXL345 ... check your connections */
-    //Serial.println(F("Ooops, no LSM303 detected ... Check your wiring!"));
+    Serial.println(F("Ooops, no LSM303 detected ... Check your wiring!"));
     while(1);
   }
   if(!mag.begin())
   {
     /* There was a problem detecting the LSM303 ... check your connections */
-    //Serial.println("Ooops, no LSM303 detected ... Check your wiring!");
+    Serial.println("Ooops, no LSM303 detected ... Check your wiring!");
     while(1);
   }
   if(!bmp.begin())
   {
     /* There was a problem detecting the BMP085 ... check your connections */
-    //Serial.print("Ooops, no BMP085 detected ... Check your wiring or I2C ADDR!");
+    Serial.print("Ooops, no BMP085 detected ... Check your wiring or I2C ADDR!");
     while(1);
     
   }
   if(!gyro.begin())
   {
     /* There was a problem detecting the L3GD20 ... check your connections */
-    //Serial.print("Ooops, no L3GD20 detected ... Check your wiring or I2C ADDR!");
+    Serial.print("Ooops, no L3GD20 detected ... Check your wiring or I2C ADDR!");
     while(1);
   }
   
@@ -132,5 +132,5 @@ void displaySensorDetails(void)
   //Serial.println(F("------------------------------------"));
   //Serial.println(F(""));
   
-  delay(500);
+  //delay(500);
 }

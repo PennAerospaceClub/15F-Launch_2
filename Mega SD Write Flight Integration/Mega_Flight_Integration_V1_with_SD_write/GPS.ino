@@ -1,9 +1,3 @@
-//4.2 GPS
-//4.2.1 Interfacing GPS
-void initGPS() {
-  GPSSerial.begin(9600);
-}
-
 String updateGPS()
 {
   static int i = 0;
@@ -99,66 +93,31 @@ void updateMaxAlt()
     getField(field, 10); // Meters
     ////Serial.println(field); //m
     // Print lat, long, and alt in degree and decimal form
-    //Serial.print("Lat: ");
-    //Serial.print(lat);
-    //Serial.print(" Long: ");
-    //Serial.print(longit);
-    //Serial.print(" Current Alt: ");
-    //Serial.println(currAlt);
-
-    //print data to SD
-    //GPSSD();
-
-    //Create a string with all of the GPS data
 
     String GPSdataString = String(lat) + ", " +  String(longit) + ", " +  String(currAlt);
   }
 }
-  
-//PRINT GPS DATA TO SD
-/*void GPSSD()
-{
-  if (GPSSerial.available())
-  {
-     String latstr = String(lat);
-     String longitstr = String(longit);
-     String currALTstr = String(currAlt);
-     String GPSdataString = latstr + " " + longitstr + " " + currALTstr;
-     
-     File dataFile = SD.open("gps.txt", FILE_WRITE);
-     delay(100);
-     if (dataFile) {
-      //  dataFile.println(dataString);
-
-        delay(100); 
-        dataFile.close();  
-        delay(300); 
-     }  
-        // if the file isn't open, pop up an error:
-     else {
-        //Serial.print("gps text fail");
-        digitalWrite(LED_YELLOW, HIGH);
-        delay(100);
-        digitalWrite(LED_YELLOW, LOW);
-     }       
-  }      
-}
-*/
 
 //4.2.2 GPS Boundary Box
 //CHECK IF THE BALLOON IS IN THE BOUNDARY BOX
 boolean inBdryBox() {
-  ////Serial.print("lat: "); //Serial.print(lat); //Serial.print(" max lat: "); //Serial.print(maxLat); //Serial.print(" min lat: "); //Serial.print(minLat); // Debug
-  ////Serial.print("long: "); //Serial.print(longit); //Serial.print(" max long: "); //Serial.print(maxLong); //Serial.print(" min long: "); //Serial.print(minLong);
-  ////Serial.print("currAlt: "); //Serial.print(currAlt);
-  if ((lat < maxLat) && (lat > minLat) && (longit < maxLong) && (longit > minLong) && (currAlt < 29000)) 
+  if ((lat < maxLat) && (lat > minLat) && (longit < maxLong) && (longit > minLong) && (currAlt < 29000)) //HERE <-- allow us to adjust maximum wanted altitude
   {
-    ////Serial.println("I'm in bdry"); //Debug
     return true;
   }
   else
   {
-    ////Serial.println("I'm not in bdry"); //Debug
+    return false;
+  }
+}
+
+boolean isFalling() {
+  if (currAlt + 500 < maxAlt)
+  {
+    return true;
+  }
+  else
+  {
     return false;
   }
 }
@@ -186,16 +145,8 @@ void getField(char* buffer, int index)
   buffer[fieldPos] = '\0';
 }
 
-//4.2.3 GPS Falling
-//CHECK IF THE BALLOON HAS DESCENDED FROM ITS PEAK ALTITUDE
-boolean isFalling() {
-  if (currAlt + 500 < maxAlt)
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+String GPStoString(){
+  String GPSdataString = String(lat) + "," + String(longit) + "," + String(currAlt);
 }
+
 

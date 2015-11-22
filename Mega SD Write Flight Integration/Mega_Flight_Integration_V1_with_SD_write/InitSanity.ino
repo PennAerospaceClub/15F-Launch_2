@@ -1,4 +1,22 @@
+//EXPECT TO HAVE SERIAL HANDSHAKE WITH TRACKUINO IMPLEMENTED LATER
+
 //4.5 Sanity
+boolean initiallySane()
+{
+  if(!(currAlt == -1) || !(lat == -1) || !(longit == -1)){
+    GPSgivingDataInitially = true;
+  }
+  if(inBdryBox()){
+    inBdry = true;
+  }
+  if(!isFalling()){
+    falling = false;
+  }
+  if(arduinoSerial && GPSSerial){
+    softwareSerialsInitially = true;
+  }
+}
+
 boolean sanityCheck()
 {
   boolean bdryBool = true;
@@ -7,15 +25,12 @@ boolean sanityCheck()
   
   if (!inBdryBox()){
     bdryBool =  false;
-    ////Serial.println("bdry"); //Debug
   }
   if (isFalling()){
     fallingBool =  false;
-    ////Serial.println("falling"); //Debug
   }
   if ((currAlt == -1) || (lat == -1) || (longit == -1)){
     gpsBool =  false;
-    ////Serial.println("gpsbool"); //Debug
   }
 
   sanitySerial_SD_LED(bdryBool, fallingBool, gpsBool);
