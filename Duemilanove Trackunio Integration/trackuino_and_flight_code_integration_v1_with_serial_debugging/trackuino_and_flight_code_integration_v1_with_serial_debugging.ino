@@ -132,7 +132,6 @@ void loop() {
   while (arduinoSerial.available()){
     megaInput.concat(arduinoSerial.read());
   }
- 
   arduinoSerial.write(("I got:" + megaInput).c_str()); //test for reading data
   
   if ((int32_t) (millis() - next_aprs) >= 0) {

@@ -8,6 +8,15 @@
    for temperature, imu, and voltage which is sent as a string via the aprs.send() function. 
 
  //V2: this version sends GPS data into the Mega
+
+ NOTE: the new clock for the Mega should be: 
+
+  if((millis() - nextWrite) >= 0){
+    arduinoSerial.write(imuData.c_str());
+    SDLog(stringForSD); 
+    nextWrite += nextWritePeriod; 
+    }
+  
 */
 
 #if (ARDUINO + 0) == 0
@@ -49,7 +58,7 @@
 
 //0.0 Serial
 
-String megaInput = ""; //This is the input from the Mega
+String megaInput = "no data yet"; //This is the input from the Mega
 
 SoftwareSerial arduinoSerial(12, 13); //rx,tx
 //1.0 Trackuino
@@ -130,27 +139,35 @@ void get_pos()
 void loop() {
 
 //Trackuino Section -- sends the next APRS frame
+  String gpsData = createGPSString(); //create a string to send to the Mega for SD writing
+  
   while (arduinoSerial.available()){
+    megaInput = "PAC: "; 
     megaInput.concat(arduinoSerial.read());
   }
   
   if ((int32_t) (millis() - next_aprs) >= 0) {
     get_pos();
     aprs_send(megaInput); //Sending our IMU data
-    next_aprs += APRS_PERIOD * 1000L;
+    next_aprs += APRS_PERIOD * 1000L; //iterates by 30 seconds
+    
+    arduinoSerial.write(gpsData.c_str()); //send the data to the Mega to save to SD
+    
     while (afsk_flush()) {
       power_save();
     }
-
-   megaInput = ""; 
 
     #ifdef DEBUG_MODEM
     // Show modem ISR stats from the previous transmission
     afsk_debug();
     #endif
   }
+  
+}
 
-  power_save(); // Incoming GPS data or interrupts will wake us up
+String createGPSString(){
+
+  return String(gps_time) + "," + String(gps_aprs_lat) + "," + String(gps_aprs_lon) + "," + String(int(gps_course + 0.5)) + "," + String(int(gps_speed + 0.5)) + "," + String(long((gps_altitude)/0.3048) + 0.5); 
 }
 
 
