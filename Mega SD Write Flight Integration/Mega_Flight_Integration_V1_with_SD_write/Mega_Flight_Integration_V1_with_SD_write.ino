@@ -179,13 +179,13 @@ void loop() {
     initSane = initiallySane();
   }
   updateGPS();
-  updateMaxAlt();
+
   
   String imuData = runIMU();
 
   //Smoothing
   smooth(); 
-
+  updateMaxAlt();
   //Needs to be after smoothing -- AND TRACKUINO STUFF
   String stringForSD = imuData + "," + GPStoString(); // the final string that we print to SD
   nichromeCheck();

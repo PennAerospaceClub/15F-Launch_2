@@ -22,8 +22,8 @@ String updateGPS()
 
 void updateMaxAlt()
 {
-  if (currAlt >= maxAlt){
-    maxAlt = currAlt;
+  if (smAlt >= maxAlt){
+    maxAlt = smAlt;
   }
   if(maxAlt > 100000){
     maxAlt = 0;
