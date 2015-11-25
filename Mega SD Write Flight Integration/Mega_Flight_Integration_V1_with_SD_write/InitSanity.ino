@@ -16,13 +16,13 @@ boolean initiallySane()
     falling = false;
     sanityState += 4;
   }
-  if(arduinoSerial && GPSSerial){
+  if(Serial2 && Serial1){
     softwareSerialsInitially = true;
     sanityState += 8;
   }
 //  String duoHandshake = "";
 //  for(int i = 0; i < 19; i++){
-//    duoHandshake += arduinoSerial.read();
+//    duoHandshake += Serial1.read();
 //  }
 //  if(duoHandshake == "Hello, Mega world?"){
 //    sd_connected = true;

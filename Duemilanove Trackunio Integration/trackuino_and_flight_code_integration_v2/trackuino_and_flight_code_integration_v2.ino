@@ -66,7 +66,6 @@ void setup() {
   //Mega Serial Comms
   
   arduinoSerial.begin(9600); 
-  arduinoSerial.println("Hello, Mega world?");
 
   //2.0 Trackuino Setup
   pinMode(LED_PIN, OUTPUT);
@@ -130,27 +129,32 @@ void get_pos()
 void loop() {
 
 //Trackuino Section -- sends the next APRS frame
-  while (arduinoSerial.available()){
-    megaInput.concat(arduinoSerial.read());
-  }
-  
-  if ((int32_t) (millis() - next_aprs) >= 0) {
-    get_pos();
-    aprs_send(megaInput); //Sending our IMU data
-    next_aprs += APRS_PERIOD * 1000L;
-    while (afsk_flush()) {
-      power_save();
+
+    if(arduinoSerial.available()){
+      arduinoSerial.write("1");
     }
 
-   megaInput = ""; 
-
-    #ifdef DEBUG_MODEM
-    // Show modem ISR stats from the previous transmission
-    afsk_debug();
-    #endif
-  }
-
-  power_save(); // Incoming GPS data or interrupts will wake us up
+//  while (arduinoSerial.available()){
+//    megaInput.concat(arduinoSerial.read());
+//  }
+//  
+//  if ((int32_t) (millis() - next_aprs) >= 0) {
+//    get_pos();
+//    aprs_send(megaInput); //Sending our IMU data
+//    next_aprs += APRS_PERIOD * 1000L;
+//    while (afsk_flush()) {
+//      power_save();
+//    }
+//
+//   megaInput = ""; 
+//
+//    #ifdef DEBUG_MODEM
+//    // Show modem ISR stats from the previous transmission
+//    afsk_debug();
+//    #endif
+//  }
+//
+//  power_save(); // Incoming GPS data or interrupts will wake us up
 }
 
 

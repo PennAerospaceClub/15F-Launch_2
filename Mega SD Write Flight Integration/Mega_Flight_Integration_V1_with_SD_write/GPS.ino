@@ -2,9 +2,9 @@ String updateGPS()
 {
   static int i = 0;
   
-  while (GPSSerial.available())
+  while (Serial2.available())
   {
-    char ch = GPSSerial.read();
+    char ch = Serial2.read();
     if (ch != '\n' && i < SENTENCE_SIZE)
     {
       sentence[i] = ch;

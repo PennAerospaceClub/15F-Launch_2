@@ -20,9 +20,8 @@
 #include <SoftwareSerial.h>
 #include <Servo.h> 
 
-//Serial
-SoftwareSerial arduinoSerial(12,13);
-SoftwareSerial GPSSerial(10, 11);
+//Serial1 = Arduino
+//Serial2 = GPS
 
 //1.1 Sanity Check --Inits should be opposite of what we want at beginning
 boolean initSane = false;
@@ -116,19 +115,20 @@ unsigned long prevGlobal;
 
 //Section 2: Setup
 void setup() {
-  //Initializations
-  arduinoSerial.begin(9600); 
+//Initializations
+  //Serial
   Serial.begin(9600);
-  Serial.println(arduinoSerial.isListening()); //Debug
-  arduinoSerial.write("Hello Uno"); 
-  
-  GPSSerial.begin(9600);
+  //Ardunio
+  Serial1.begin(9600);
+  //GPS
+  Serial2.begin(9600);
+  //SD Card
   SPI.begin();
 
 //I don't think this is necessary, keeping for now --Antonio
 //  //GPS Serial serial 
-//  pinMode(10, INPUT); //rx
-//  pinMode(11, OUTPUT); //tx
+//pinMode(10, INPUT); //rx
+//pinMode(11, OUTPUT); //tx
   
   //LED Setup
   pinMode(LED_GREEN, OUTPUT);
@@ -162,19 +162,21 @@ void setup() {
 }
 
 //===========================================
+
+int time1 = 0;
 void loop() {
   Serial.println("In loop"); //Debug
+  time1 = millis();
+  while((time1 + 5000) > millis()){
+      Serial1.write(1);
+      if (Serial1.available()) {
+      Serial.print(Serial1.read());
+      }
+  }
+  Serial.println("there");
+  
   while(!initSane){
     initSane = initiallySane();
-    //Debug
-    Serial.println(arduinoSerial.available());
-    arduinoSerial.write("Mega Here"); //Debug
-    delay(1000);
-    while(arduinoSerial.available() > 0){
-      Serial.print((arduinoSerial.read()));
-    }
-    delay(1000);
-  //End Debug
   }
   updateGPS();
   updateMaxAlt();
@@ -191,7 +193,7 @@ void loop() {
   nichromeExperimentCheck();
   updateNichromeExperiment();
   if(millis() - nextWrite >= nextWritePeriod){
-    arduinoSerial.write(imuData.c_str());
+    Serial1.write(imuData.c_str());
     SDLog(stringForSD); 
     nextWrite += nextWritePeriod; 
     }
