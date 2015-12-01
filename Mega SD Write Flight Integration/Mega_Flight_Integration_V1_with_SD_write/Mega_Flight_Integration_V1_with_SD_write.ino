@@ -20,9 +20,8 @@
 #include <SoftwareSerial.h>
 #include <Servo.h> 
 
-//Serial
-SoftwareSerial arduinoSerial(12,13);
-SoftwareSerial GPSSerial(10, 11);
+//Serial1 = Arduino
+//Serial2 = GPS
 
 //1.1 Sanity Check --Inits should be opposite of what we want at beginning
 boolean initSane = false;
@@ -33,9 +32,9 @@ boolean softwareSerialsInitially = false;
 boolean sd_connected = false;
 
 //1.2 LED Declarations
-const int LED_GREEN = 36;
-const int LED_YELLOW = 38;
-const int LED_RED = 40;
+const int LED_GREEN = 23;
+const int LED_YELLOW = 25;
+const int LED_RED = 27;
 
 unsigned int redLightBlinkStop;
 boolean redLightOn = false;
@@ -43,8 +42,8 @@ unsigned int greenLightBlinkStop;
 boolean greenLightOn = false;
 
 //1.3 Temperature Analog-in Declarations
-const int TEMP1_PIN = A0;
-const int TEMP2_PIN = A1;
+//const int TEMP1_PIN = A0;
+//const int TEMP2_PIN = A1;
 
 //1.4 SD Declarations
 int cs_pin = 53;
@@ -89,12 +88,12 @@ unsigned long smAlt = -1; //altitude in meters
 char sentence[SENTENCE_SIZE];
 
 //1.8 Nichrome Declarations
-const int NICHROME_GATE_PIN = 30;
+const int NICHROME_GATE_PIN = 29;
 boolean nichromeStarted = false;
 unsigned long nichromeEndTime = 0xFFFFFFFFL;
 boolean nichromeFinished = false;
 
-const int NICHROME_EXPERIMENT_PIN = 34;
+const int NICHROME_EXPERIMENT_PIN = 31;
 boolean nichromeExperimentStarted = false;
 unsigned long nichromeExperimentEndTime = 0xFFFFFFFFL;
 boolean nichromeExperimentFinished = false;
@@ -116,18 +115,20 @@ unsigned long prevGlobal;
 
 //Section 2: Setup
 void setup() {
-  //Initializations
-  arduinoSerial.begin(9600); 
+//Initializations
+  //Serial
   Serial.begin(9600);
-  arduinoSerial.write("Hello Uno"); 
-  
-  GPSSerial.begin(9600);
+  //Ardunio
+  Serial1.begin(9600);
+  //GPS
+  Serial2.begin(9600);
+  //SD Card
   SPI.begin();
 
 //I don't think this is necessary, keeping for now --Antonio
 //  //GPS Serial serial 
-//  pinMode(10, INPUT); //rx
-//  pinMode(11, OUTPUT); //tx
+//pinMode(10, INPUT); //rx
+//pinMode(11, OUTPUT); //tx
   
   //LED Setup
   pinMode(LED_GREEN, OUTPUT);
@@ -161,18 +162,30 @@ void setup() {
 }
 
 //===========================================
+
+int time1 = 0;
 void loop() {
+  Serial.println("In loop"); //Debug
+  time1 = millis();
+  while((time1 + 5000) > millis()){
+      Serial1.write(1);
+      if (Serial1.available()) {
+      Serial.print(Serial1.read());
+      }
+  }
+  Serial.println("there");
+  
   while(!initSane){
     initSane = initiallySane();
   }
   updateGPS();
-  updateMaxAlt();
+
   
   String imuData = runIMU();
 
   //Smoothing
   smooth(); 
-
+  updateMaxAlt();
   //Needs to be after smoothing -- AND TRACKUINO STUFF
   String stringForSD = imuData + "," + GPStoString(); // the final string that we print to SD
   nichromeCheck();
@@ -180,7 +193,7 @@ void loop() {
   nichromeExperimentCheck();
   updateNichromeExperiment();
   if(millis() - nextWrite >= nextWritePeriod){
-    arduinoSerial.write(imuData.c_str());
+    Serial1.write(imuData.c_str());
     SDLog(stringForSD); 
     nextWrite += nextWritePeriod; 
     }

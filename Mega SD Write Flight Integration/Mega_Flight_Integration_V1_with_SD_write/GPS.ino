@@ -1,10 +1,10 @@
 String updateGPS()
 {
   static int i = 0;
-
-  while (GPSSerial.available())
+  
+  while (Serial2.available())
   {
-    char ch = GPSSerial.read();
+    char ch = Serial2.read();
     if (ch != '\n' && i < SENTENCE_SIZE)
     {
       sentence[i] = ch;
@@ -22,8 +22,8 @@ String updateGPS()
 
 void updateMaxAlt()
 {
-  if (currAlt >= maxAlt){
-    maxAlt = currAlt;
+  if (smAlt >= maxAlt){
+    maxAlt = smAlt;
   }
   if(maxAlt > 100000){
     maxAlt = 0;
@@ -91,7 +91,7 @@ void updateMaxAlt()
     currAlt = currAlt / 10; //Marcos* -- Not sure if we should do this, loses the last decimal point, I know it's not important
     ////Serial.print(field); //182.2
     getField(field, 10); // Meters
-    ////Serial.println(field); //m
+    Serial.println(field); //m
     // Print lat, long, and alt in degree and decimal form
 
     String GPSdataString = String(lat) + ", " +  String(longit) + ", " +  String(currAlt);
