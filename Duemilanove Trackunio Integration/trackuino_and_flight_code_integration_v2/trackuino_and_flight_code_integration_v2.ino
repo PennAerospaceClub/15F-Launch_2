@@ -145,7 +145,7 @@ void loop() {
   String gpsData = createGPSString(); //create a string to send to the Mega for SD writing
   
   while (arduinoSerial.available()){
-    Serial.println(arduinoSerial.readString()); 
+    //Serial.println(arduinoSerial.readString()); 
     megaInput = "PAC: "; 
     megaInput.concat(arduinoSerial.read());
   }
