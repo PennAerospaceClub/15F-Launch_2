@@ -22,13 +22,13 @@ void setup() {
 
 void loop() { // run over and over
 
- delay(1000);
+delay(1000);
  arduinoSerial.print("3");
  while (arduinoSerial.available()>0) {
   Serial.print(arduinoSerial.readString());
  }
 
-//   if (Serial.available()) {
-//    arduinoSerial.write(Serial.read());
-//      }
+ if (Serial.available()) {
+   arduinoSerial.write(Serial.read());
+      }
 }

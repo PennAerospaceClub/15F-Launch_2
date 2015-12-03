@@ -156,8 +156,8 @@ void loop() {
     while (afsk_flush()) {
       power_save();
     }
-
-<<<<<<< HEAD
+  }
+  
   while (arduinoSerial.available()){
     megaInput.concat(arduinoSerial.read());
   }
@@ -172,24 +172,19 @@ void loop() {
 
    megaInput = ""; 
 
-=======
->>>>>>> bd46b729b8692a9cd383373502e5a9e49297b28e
     #ifdef DEBUG_MODEM
     // Show modem ISR stats from the previous transmission
     afsk_debug();
     #endif
   }
-<<<<<<< HEAD
-
   power_save(); // Incoming GPS data or interrupts will wake us up
-=======
   
 }
 
 String createGPSString(){
 
   return String(gps_time) + "," + String(gps_aprs_lat) + "," + String(gps_aprs_lon) + "," + String(int(gps_course + 0.5)) + "," + String(int(gps_speed + 0.5)) + "," + String(long((gps_altitude)/0.3048) + 0.5); 
->>>>>>> bd46b729b8692a9cd383373502e5a9e49297b28e
+
 }
 
 
