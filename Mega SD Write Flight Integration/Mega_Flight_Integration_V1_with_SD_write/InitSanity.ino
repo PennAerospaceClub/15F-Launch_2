@@ -20,14 +20,12 @@ boolean initiallySane()
     softwareSerialsInitially = true;
     sanityState += 8;
   }
-//  String duoHandshake = "";
-//  for(int i = 0; i < 19; i++){
-//    duoHandshake += Serial1.read();
-//  }
-//  if(duoHandshake == "Hello, Mega world?"){
-//    sd_connected = true;
-//    sanityState += 16; 
-//  }
+  if(Serial1.available() > 0){
+    Serial.println("here");
+    Serial.print(Serial1.readString());
+    Serial1.print("4");
+    //sanityState += 16;
+  }
   Serial.print("Sanity: ");
   Serial.println(sanityState);
   sanityLED(sanityState);
