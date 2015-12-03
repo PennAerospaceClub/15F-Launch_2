@@ -134,27 +134,27 @@ void loop() {
       arduinoSerial.write("1");
     }
 
-//  while (arduinoSerial.available()){
-//    megaInput.concat(arduinoSerial.read());
-//  }
-//  
-//  if ((int32_t) (millis() - next_aprs) >= 0) {
-//    get_pos();
-//    aprs_send(megaInput); //Sending our IMU data
-//    next_aprs += APRS_PERIOD * 1000L;
-//    while (afsk_flush()) {
-//      power_save();
-//    }
-//
-//   megaInput = ""; 
-//
-//    #ifdef DEBUG_MODEM
-//    // Show modem ISR stats from the previous transmission
-//    afsk_debug();
-//    #endif
-//  }
-//
-//  power_save(); // Incoming GPS data or interrupts will wake us up
+  while (arduinoSerial.available()){
+    megaInput.concat(arduinoSerial.read());
+  }
+  
+  if ((int32_t) (millis() - next_aprs) >= 0) {
+    get_pos();
+    aprs_send(megaInput); //Sending our IMU data
+    next_aprs += APRS_PERIOD * 1000L;
+    while (afsk_flush()) {
+      power_save();
+    }
+
+   megaInput = ""; 
+
+    #ifdef DEBUG_MODEM
+    // Show modem ISR stats from the previous transmission
+    afsk_debug();
+    #endif
+  }
+
+  power_save(); // Incoming GPS data or interrupts will wake us up
 }
 
 

@@ -124,11 +124,6 @@ void setup() {
   Serial2.begin(9600);
   //SD Card
   SPI.begin();
-
-//I don't think this is necessary, keeping for now --Antonio
-//  //GPS Serial serial 
-//pinMode(10, INPUT); //rx
-//pinMode(11, OUTPUT); //tx
   
   //LED Setup
   pinMode(LED_GREEN, OUTPUT);
@@ -168,7 +163,7 @@ void loop() {
   Serial.println("In loop"); //Debug
   time1 = millis();
   while((time1 + 5000) > millis()){
-      Serial1.write(1);
+      Serial1.write("1");
       if (Serial1.available()) {
       Serial.print(Serial1.read());
       }
