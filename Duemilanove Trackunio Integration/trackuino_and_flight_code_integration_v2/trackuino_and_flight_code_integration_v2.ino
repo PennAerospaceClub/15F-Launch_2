@@ -54,7 +54,7 @@
 #  include <WProgram.h>
 #endif
 
-//Section 1: Declamrations
+//Section 1: Declarations
 
 //0.0 Serial
 
@@ -86,7 +86,7 @@ void setup() {
       Serial.println("RESET");
     #endif
 
-  buzzer_setup();
+  //buzzer_setup();
   afsk_setup();
   gps_setup();
   sensors_setup();
@@ -100,9 +100,11 @@ void setup() {
   Serial.println(sensors_vin());
   #endif
 
+  while(serialSanity()); 
+
   // Do not start until we get a valid time reference
   // for slotted transmissions.
-  if (APRS_SLOT >= 0) {
+/*  if (APRS_SLOT >= 0) {
     do {
       while (! Serial.available())
         power_save();
@@ -113,7 +115,7 @@ void setup() {
   }
   else {
     next_aprs = millis();
-  }  
+  }  */
 }
 
 void get_pos()
@@ -138,10 +140,12 @@ void get_pos()
 //Section 3: Loop
 void loop() {
 
+  delay(1000); 
 //Trackuino Section -- sends the next APRS frame
   String gpsData = createGPSString(); //create a string to send to the Mega for SD writing
   
   while (arduinoSerial.available()){
+    Serial.println(arduinoSerial.readString()); 
     megaInput = "PAC: "; 
     megaInput.concat(arduinoSerial.read());
   }
@@ -156,8 +160,8 @@ void loop() {
     while (afsk_flush()) {
       power_save();
     }
-
-<<<<<<< HEAD
+  }
+  
   while (arduinoSerial.available()){
     megaInput.concat(arduinoSerial.read());
   }
@@ -172,25 +176,38 @@ void loop() {
 
    megaInput = ""; 
 
-=======
->>>>>>> bd46b729b8692a9cd383373502e5a9e49297b28e
     #ifdef DEBUG_MODEM
     // Show modem ISR stats from the previous transmission
     afsk_debug();
     #endif
   }
-<<<<<<< HEAD
-
   power_save(); // Incoming GPS data or interrupts will wake us up
-=======
   
 }
 
 String createGPSString(){
 
   return String(gps_time) + "," + String(gps_aprs_lat) + "," + String(gps_aprs_lon) + "," + String(int(gps_course + 0.5)) + "," + String(int(gps_speed + 0.5)) + "," + String(long((gps_altitude)/0.3048) + 0.5); 
->>>>>>> bd46b729b8692a9cd383373502e5a9e49297b28e
+
 }
+
+boolean serialSanity(){
+
+  if (arduinoSerial){
+      Serial.println("in here");
+      arduinoSerial.print("3"); 
+  }
+  
+  if (arduinoSerial.available()>0){
+    if(arduinoSerial.readString() == "4"){
+      
+      Serial.println("true");
+      return true; 
+    }
+  }
+  else return false;
+}
+
 
 
 
