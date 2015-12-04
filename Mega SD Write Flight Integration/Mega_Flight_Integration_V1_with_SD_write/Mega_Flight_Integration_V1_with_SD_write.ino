@@ -81,7 +81,7 @@ unsigned long maxAlt = 0; //measures in meters
 //First Reference Data Points for Smoothing UPDATE DAY OF LAUNCH WITH LAUNCH LOCATION (updated to previous good data point)
 unsigned long smLat = -1; 
 unsigned long smLong = -1;
-unsigned long smAlt = -1; //altitude in meters
+unsigned long smAlt = 0; //altitude in meters
 
 //1.7 inDryBox Utility
 #define SENTENCE_SIZE 75
@@ -137,9 +137,9 @@ void setup() {
   pinMode(cs_pin, OUTPUT);
   
   //GPS Setup
-  for(int i = 0; i < 10; i++){
+  for(int i = 0; i < 5; i++){
   updateGPS();
-  delay(1000);
+  delay(2000);
   }
 
   //Nichrome Setup
@@ -149,6 +149,8 @@ void setup() {
   //IMU Setup
   initIMU();
   delay(10000);
+
+  Serial.println("near end of setup");
 
   //Turn off Lights
   digitalWrite(LED_GREEN, LOW);
@@ -160,12 +162,10 @@ void setup() {
 
 int time1 = 0;
 void loop() {
-//  while(Serial1.available() > 0){
-//    Serial.print(Serial1.readString());
-//    Serial1.print("4");
-//  }
-//  delay(1000);
+  Serial.println("Loop");
+  
   while(!initSane){
+    updateGPS();
     initSane = initiallySane();
   }
 //  updateGPS();
