@@ -150,8 +150,6 @@ void setup() {
   initIMU();
   delay(10000);
 
-  Serial.println("near end of setup");
-
   //Turn off Lights
   digitalWrite(LED_GREEN, LOW);
   digitalWrite(LED_YELLOW, LOW);

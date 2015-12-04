@@ -29,10 +29,10 @@ boolean initiallySane()
     sanityState += 8;
   }
   if(Serial1.available() > 0){
-    Serial.println("here");
-    Serial.print(Serial1.readString());
-    Serial1.print("4");
-    //sanityState += 16;
+    if((char)Serial1.read() == '3'){
+      sanityState += 16;
+      Serial1.print("4");
+    }
   }
   
   Serial.println(sanityState);
