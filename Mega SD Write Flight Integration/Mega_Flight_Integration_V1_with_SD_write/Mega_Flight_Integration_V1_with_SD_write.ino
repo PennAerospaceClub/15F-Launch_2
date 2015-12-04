@@ -160,37 +160,32 @@ void setup() {
 
 int time1 = 0;
 void loop() {
-  Serial.println("In loop"); //Debug
-  time1 = millis();
-  while((time1 + 5000) > millis()){
-      Serial1.write("1");
-      if (Serial1.available()) {
-      Serial.print(Serial1.read());
-      }
-  }
-  Serial.println("there");
-  
+//  while(Serial1.available() > 0){
+//    Serial.print(Serial1.readString());
+//    Serial1.print("4");
+//  }
+//  delay(1000);
   while(!initSane){
     initSane = initiallySane();
   }
-  updateGPS();
-
-  
-  String imuData = runIMU();
-
-  //Smoothing
-  smooth(); 
-  updateMaxAlt();
-  //Needs to be after smoothing -- AND TRACKUINO STUFF
-  String stringForSD = imuData + "," + GPStoString(); // the final string that we print to SD
-  nichromeCheck();
-  updateNichrome();
-  nichromeExperimentCheck();
-  updateNichromeExperiment();
-  if(millis() - nextWrite >= nextWritePeriod){
-    Serial1.write(imuData.c_str());
-    SDLog(stringForSD); 
-    nextWrite += nextWritePeriod; 
-    }
+//  updateGPS();
+//  updateMaxAlt();
+//  
+//  String imuData = runIMU();
+//
+//  //Smoothing
+//  smooth(); 
+//
+//  //Needs to be after smoothing -- AND TRACKUINO STUFF
+//  String stringForSD = imuData + "," + GPStoString(); // the final string that we print to SD
+//  nichromeCheck();
+//  updateNichrome();
+//  nichromeExperimentCheck();
+//  updateNichromeExperiment();
+//  if(millis() - nextWrite >= nextWritePeriod){
+//    Serial1.write(imuData.c_str());
+//    SDLog(stringForSD); 
+//    nextWrite += nextWritePeriod; 
+//    }
 
 }

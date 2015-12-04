@@ -1,6 +1,6 @@
 /*
  PAC Flight Code for Trackuino
- @version: 11/28/15
+ @version: 12/3/15
  @author Omkar Savant, based on source code from community
 
  //Changes to architecture: 
@@ -60,7 +60,7 @@
 
 String megaInput = "no data yet"; //This is the input from the Mega
 
-SoftwareSerial arduinoSerial(12, 13); //rx,tx
+SoftwareSerial arduinoSerial(10, 11); //rx,tx
 //1.0 Trackuino
 
 // Module constants
