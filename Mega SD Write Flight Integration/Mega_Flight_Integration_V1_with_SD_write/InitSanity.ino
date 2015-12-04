@@ -4,11 +4,13 @@
 boolean initiallySane()
 {
   int sanityState = 0;
-  Serial.print(currAlt);
-  Serial.print(", ");
-  Serial.print(lat);
-  Serial.print(", ");
-  Serial.println(longit);
+
+  //Debug
+//  Serial.print(currAlt);
+//  Serial.print(", ");
+//  Serial.print(lat);
+//  Serial.print(", ");
+//  Serial.println(longit);
   
   if(!(currAlt == -1) && !(lat == -1) && !(longit == -1)){
     GPSgivingDataInitially = true;
@@ -32,11 +34,7 @@ boolean initiallySane()
     Serial1.print("4");
     //sanityState += 16;
   }
-<<<<<<< HEAD
-  Serial.print("Sanity: ");
-=======
   
->>>>>>> 1e34ab7e5e9250baa13aa7af0292f9117c6b7c7e
   Serial.println(sanityState);
   sanityLED(sanityState);
   if(sanityState < 31){

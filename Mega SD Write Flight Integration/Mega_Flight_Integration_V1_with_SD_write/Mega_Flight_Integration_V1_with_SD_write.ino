@@ -160,18 +160,8 @@ void setup() {
 
 //===========================================
 
-int time1 = 0;
 void loop() {
-<<<<<<< HEAD
-//  while(Serial1.available() > 0){
-//    Serial.print(Serial1.readString());
-//    Serial1.print("4");
-//  }
-//  delay(1000);
-=======
   Serial.println("Loop");
-  
->>>>>>> 1e34ab7e5e9250baa13aa7af0292f9117c6b7c7e
   while(!initSane){
     updateGPS();
     initSane = initiallySane();
