@@ -78,7 +78,7 @@ void setup() {
   //Mega Serial Comms
   
   arduinoSerial.begin(9600); 
-  arduinoSerial.println("Hello, Mega world?");
+  //arduinoSerial.println("Hello, Mega world?");
 
   //2.0 Trackuino Setup
   pinMode(LED_PIN, OUTPUT);
@@ -190,15 +190,10 @@ while(!globalSanity){
 }*/
 
 void serialSanity(){
-
-  if (arduinoSerial){
-      Serial.println("in here");
+      Serial.println(".");
       arduinoSerial.print("3"); 
-  }
-  
-  if (arduinoSerial.available()>0){
-    if(arduinoSerial.readString() == "4"){
-      
+  if(arduinoSerial.available()){
+    if((char)arduinoSerial.read() == '4'){
       Serial.println("true");
       globalSanity = true; 
     }
