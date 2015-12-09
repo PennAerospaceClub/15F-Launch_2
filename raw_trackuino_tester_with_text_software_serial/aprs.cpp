@@ -37,8 +37,10 @@ float meters_to_feet(float m)
 }
 
 // Exported functions
-void aprs_send()
+void aprs_send(String ourString)
 {
+  
+  char ourComment[150]; //The imu comment we are sending 
   char temp[12];                   // Temperature (int/ext)
   const struct s_address addresses[] = { 
     {D_CALLSIGN, D_CALLSIGN_ID},  // Destination callsign
@@ -75,10 +77,11 @@ void aprs_send()
   snprintf(temp, 6, "%d", sensors_ext_lm60());
   ax25_send_string(temp);
   ax25_send_string("/V=");
-  snprintf(temp, 6, "%s", sensors_vin());
+  snprintf(temp, 6, "%d", sensors_vin());
   ax25_send_string(temp);
   ax25_send_byte(' ');
-  ax25_send_string(APRS_COMMENT);     // Comment
+  snprintf(ourComment, 150, "%s", ourString.c_str()); 
+  ax25_send_string(ourComment);     // Comment
   ax25_send_footer();
 
   ax25_flush_frame();                 // Tell the modem to go

@@ -148,10 +148,12 @@ while(!globalSanity){
 //Trackuino Section -- sends the next APRS frame
   //String gpsData = createGPSString(); //create a string to send to the Mega for SD writing
   
-  while (arduinoSerial.available()){
+  if (arduinoSerial.available()){
+    Serial.println("we're in here"); 
     //Serial.println(arduinoSerial.readString()); 
     megaInput = "PAC: "; 
     megaInput.concat(arduinoSerial.read());
+    Serial.println(megaInput); 
   }
   
   if ((int32_t) (millis() - next_aprs) >= 0) {
@@ -197,9 +199,9 @@ void serialSanity(){
   }
   
   if (arduinoSerial.available()>0){
-    if(arduinoSerial.readString() == "4"){
+   if((char)arduinoSerial.read() == '4'){
       
-      Serial.println("true");
+      Serial.println("got it" + arduinoSerial.read());
       globalSanity = true; 
     }
   }
