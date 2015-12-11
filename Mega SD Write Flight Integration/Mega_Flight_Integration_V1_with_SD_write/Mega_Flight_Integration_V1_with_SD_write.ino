@@ -164,10 +164,12 @@ void loop() {
     updateGPS();
     initSane = initiallySane();
   }
-//  updateGPS();
-//  updateMaxAlt();
-//  
-//  String imuData = runIMU();
+    updateGPS();
+    updateMaxAlt(); 
+    Serial.print(".");
+    String imuData = runIMU();
+    Serial.print(",");
+    Serial1.print("hello");
 //
 //  //Smoothing
 //  smooth(); 

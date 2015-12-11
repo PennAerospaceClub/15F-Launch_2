@@ -34,13 +34,22 @@ void initIMU(){
 /* Get a new sensor event */
 String runIMU()
 {
+    Serial.print("imu");
     sensors_event_t event;
+    
     String imuDataString = ""; 
-  
          /* Display time */
      
-    imuDataString.concat(hour()); imuDataString.concat(":"); imuDataString.concat(minute()); imuDataString.concat(":"); imuDataString.concat(second()); imuDataString.concat(", ");
-      
+    imuDataString.concat(hour()); 
+    Serial.print(imuDataString);
+    imuDataString.concat(":"); 
+    Serial.print(imuDataString); 
+    imuDataString.concat(minute());
+    imuDataString.concat(":"); 
+    imuDataString.concat(second()); 
+    Serial.print(imuDataString);
+    imuDataString.concat(", ");
+    
     /* Display the results (acceleration is measured in m/s^2) */
     accel.getEvent(&event);
     imuDataString.concat(event.acceleration.x); imuDataString.concat(", ");
@@ -79,7 +88,7 @@ String runIMU()
                                           event.pressure,
                                           temperature)); 
     }
-  
+    
     return imuDataString; 
  }  //end of runIMU
 
