@@ -33,22 +33,22 @@ void runIMU(){
     
   /* Display the results (acceleration is measured in m/s^2) */
   accel.getEvent(&event);
-  imuDataString.concat(event.acceleration.x); imuDataString.concat(", ");
-  imuDataString.concat(event.acceleration.y); imuDataString.concat(", ");
-  imuDataString.concat(event.acceleration.z); imuDataString.concat(", ");
+  imuDataString.concat(event.acceleration.x); imuDataString.concat(",");
+  imuDataString.concat(event.acceleration.y); imuDataString.concat(",");
+  imuDataString.concat(event.acceleration.z); imuDataString.concat(",");
   
   
   /* Display the results (magnetic vector values are in micro-Tesla (uT)) */
   mag.getEvent(&event);
-  imuDataString.concat(event.magnetic.x); imuDataString.concat(", ");
-  imuDataString.concat(event.magnetic.y); imuDataString.concat(", ");
-  imuDataString.concat(event.magnetic.z); imuDataString.concat(", ");
+  imuDataString.concat(event.magnetic.x); imuDataString.concat(",");
+  imuDataString.concat(event.magnetic.y); imuDataString.concat(",");
+  imuDataString.concat(event.magnetic.z); imuDataString.concat(",");
 
   /* Display the results (gyrocope values in rad/s) */
   gyro.getEvent(&event);
-  imuDataString.concat(event.gyro.x); imuDataString.concat(", ");
-  imuDataString.concat(event.gyro.y); imuDataString.concat(", ");
-  imuDataString.concat(event.gyro.z); imuDataString.concat(", ");
+  imuDataString.concat(event.gyro.x); imuDataString.concat(",");
+  imuDataString.concat(event.gyro.y); imuDataString.concat(",");
+  imuDataString.concat(event.gyro.z); imuDataString.concat(",");
 
   /* Display the pressure sensor results (barometric pressure is measure in hPa) */
   bmp.getEvent(&event);
@@ -56,12 +56,12 @@ void runIMU(){
   {
     /* Display atmospheric pressure in hPa */
     imuDataString.concat(event.pressure);
-    imuDataString.concat(", ");
+    imuDataString.concat(",");
     /* Display ambient temperature in C */
     float temperature;
     bmp.getTemperature(&temperature);
     imuDataString.concat(temperature);
-    imuDataString.concat(", ");
+    imuDataString.concat(",");
     /* Then convert the atmospheric pressure, SLP and temp to altitude    */
     /* Update this next line with the current SLP for better results      */
     float seaLevelPressure = SENSORS_PRESSURE_SEALEVELHPA;

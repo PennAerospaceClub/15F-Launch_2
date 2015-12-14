@@ -1,7 +1,7 @@
 void readGPS(){
   gooddata = false;
   while(!gooddata){
-  while(Serial1.available()){
+  while(Serial1.available() && gpsMaxSearchTime > millis()){
     if((char)Serial1.read() == '$'){
       int i = 0;
       while(i < 75){
@@ -52,5 +52,13 @@ void readGPS(){
       field = "";
     }
   }
+  gpsMaxSearchTime = millis() + 5000;
+  }
+}
+
+void updateMaxAlt()
+{
+  if (alt >= maxAlt){
+    maxAlt = alt;
   }
 }

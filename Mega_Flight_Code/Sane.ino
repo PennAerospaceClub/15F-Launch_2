@@ -1,19 +1,16 @@
 boolean initSane(){
-  readGPS();
-  //Serial.print(lat); Serial.print(", "); Serial.print(longit); Serial.print(", "); Serial.println(alt); 
 
-  
   if(inBdryBox()){
-    //Serial.println("bdry");
+    Serial.println("bdry");
     inBdry = true;
   }
   if(!isFalling()){
     falling = false;
-    //Serial.println("fall");
+    Serial.println("fall");
   }
   if(!initSD){
-    if(SD.begin(cspin)){
-      //Serial.println("sd");
+    if(SD.begin(CSPIN)){
+      Serial.println("sd");
       initSD = true;
     }
   }
